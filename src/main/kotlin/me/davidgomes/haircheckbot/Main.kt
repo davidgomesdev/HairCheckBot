@@ -1,6 +1,9 @@
+package me.davidgomes.haircheckbot
+
 import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.addEnvironmentSource
 import com.sksamuel.hoplite.addResourceOrFileSource
+import dev.kord.common.Color
 import dev.kord.common.entity.MessageType
 import dev.kord.common.entity.PresenceStatus
 import dev.kord.core.Kord
@@ -11,23 +14,19 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.core.supplier.EntitySupplyStrategy
 import dev.kord.rest.builder.message.create.embed
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import me.davidgomes.haircheckbot.model.Config
+import me.davidgomes.haircheckbot.model.ResultType
+import mu.KotlinLogging
 
-data class Config(val bot: Bot, val alcohols: Alcohols)
-
-data class Bot(val token: String)
-
-data class Alcohols(val good: String, val bad: String)
-
-val logger: Logger = LoggerFactory.getLogger("Main")
+val logger = KotlinLogging.logger { }
 
 suspend fun main() {
-    val config = ConfigLoaderBuilder.default()
-        .addEnvironmentSource()
-        .addResourceOrFileSource("/application.yaml")
-        .build()
-        .loadConfigOrThrow<Config>()
+    val config =
+        ConfigLoaderBuilder.default()
+            .addEnvironmentSource()
+            .addResourceOrFileSource("/application.yaml")
+            .build()
+            .loadConfigOrThrow<Config>()
     val badAlcohols = config.alcohols.bad.splitToList()
     val goodAlcohols = config.alcohols.good.splitToList()
 
@@ -54,18 +53,23 @@ suspend fun main() {
             val badMatch = receivedIngredients.findAllIn(badAlcohols)
             val goodMatch = receivedIngredients.findAllIn(goodAlcohols)
 
-            logger.debug("Received: $receivedIngredients")
+            logger.debug { "Received: $receivedIngredients" }
 
             message.reply {
                 embed {
                     title = "Your product details"
 
-                    description = when {
-                        badMatch.isEmpty() && goodMatch.isNotEmpty() -> "It is very good!! :heart_eyes:"
-                        badMatch.isNotEmpty() && goodMatch.isEmpty() -> "NO NO NO! :hot_face:"
-                        badMatch.isNotEmpty() -> "It has some bad stuff! :confused:"
-                        else -> "It is neutral. ¯\\_(ツ)_/¯"
+                    val type = when {
+                        badMatch.isEmpty() && goodMatch.isNotEmpty() -> ResultType.Good
+                        badMatch.isNotEmpty() && goodMatch.isEmpty() -> ResultType.Bad
+                        badMatch.isNotEmpty() -> ResultType.NotSoGood
+                        else -> ResultType.Neutral
                     }
+
+                    logger.info { "The provided ingredients are '$type'" }
+
+                    color = Color(type.color)
+                    description = type.message
 
                     if (badMatch.isNotEmpty()) {
                         field {
