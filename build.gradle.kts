@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.20"
     application
+
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "me.davidgomes"
@@ -36,4 +38,10 @@ tasks.withType<KotlinCompile> {
 
 application {
     mainClass.set("MainKt")
+}
+
+tasks.shadowJar {
+    archiveBaseName.set("HairCheckBot")
+    archiveClassifier.set("")
+    archiveVersion.set("")
 }
