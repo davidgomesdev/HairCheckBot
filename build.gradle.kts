@@ -37,7 +37,7 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("me.davidgomes.haircheckbot.MainKt")
 }
 
 tasks.shadowJar {
