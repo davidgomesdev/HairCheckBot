@@ -1,3 +1,24 @@
 alcohols:
-  good: Cetearyl Alcohol, Cetyl Alcohol, Stearyl Alcohol, Lauryl Alcohol, Myristyl Alcohol, Behenyl Alcohol, Oleyl Alcohol, C12-16 Alcohol
-  bad: SD Alcohol, SD Alcohol 40, SD Alcohol 40 B, SD Alcohol 38B, SD Alcohol 39B, SD Alcohol 40-2, Denatured Alcohol, Alcohol Denat, Ethanol, Ethyl Alcohol, Propanol, Propyl Alcohol, Isopropyl Alcohol
+  good:
+    - Cetearyl Alcohol
+    - Cetyl Alcohol
+    - Stearyl Alcohol
+    - Lauryl Alcohol
+    - Myristyl Alcohol
+    - Behenyl Alcohol
+    - Oleyl Alcohol
+    - C12-16 Alcohol
+  bad:
+    - SD Alcohol
+    - SD Alcohol 40
+    - SD Alcohol 40 B
+    - SD Alcohol 38B
+    - SD Alcohol 39B
+    - SD Alcohol 40-2
+    - Denatured Alcohol
+    - Alcohol Denat
+    - Ethanol
+    - Ethyl Alcohol
+    - Propanol
+    - Propyl Alcohol
+    - Isopropyl Alcohol

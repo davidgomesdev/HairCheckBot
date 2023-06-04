@@ -27,8 +27,8 @@ suspend fun main() {
             .addResourceOrFileSource("/application.yaml")
             .build()
             .loadConfigOrThrow<Config>()
-    val badAlcohols = config.alcohols.bad.splitToList()
-    val goodAlcohols = config.alcohols.good.splitToList()
+    val badAlcohols = config.alcohols.bad.removeExtras()
+    val goodAlcohols = config.alcohols.good.removeExtras()
 
     val kord = Kord(config.bot.token) {
         defaultStrategy = EntitySupplyStrategy.rest
@@ -90,10 +90,10 @@ suspend fun main() {
     }
 }
 
-fun String.splitToList() = split(",").map(String::removeSymbols).map(String::trim)
+fun List<String>.removeExtras() = map(String::removeSymbols).map(String::trim)
 
 fun String.findAllIn(values: List<String>): List<String> {
-    val target = this.splitToList()
+    val target = this.split(",").removeExtras()
     return values.filter { value -> target.any { value.contentEquals(it.removeSymbols(), true) } }
 }
 
